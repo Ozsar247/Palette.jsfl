@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog id="paletteloader" title="Palette.jsfl Loader" buttons="accept,cancel">
+    <label value="Palette Loader Options" />
+    <hbox>
+        <label value="Number of Keybinds" />
+        <textbox id="setup" value="10" size="8" />
+    </hbox>
+    <label value="Command Folder Name" />
+    <textbox id="folder" value="Palette_Commands" />
+</dialog>

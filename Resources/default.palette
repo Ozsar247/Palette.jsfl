@@ -1,0 +1,7 @@
+Name="Default Color Palette",
+UseFillStroke=false,
+LabelColors=false,
+Colors=[
+-#000000
+-#FFFFFF
+]
