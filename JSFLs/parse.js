@@ -3,36 +3,34 @@ function startsWith(str, prefix) {
 }
 
 function parsePalette(palette) {
-    palette = palette.replace(/\n/g, "");
-    var list = palette.split(",");
-    var tupleList = [];
+    var list = palette.replace(/[\r\n]/g, "").split(",");
+    var result = {};
     for (var i = 0; i < list.length; i++) {
         var s = list[i];
-        var split = s.split("=");
-        var key = split[0];
-        var value = split[1];
-        
+        var eq = s.indexOf("=");
+        if (eq < 0) continue;
+        var key = s.substring(0, eq);
+        var value = s.substring(eq + 1);
+
         if (startsWith(value, "[")) {
             value = value.replace("[", "").replace("]", "");
-            var list = value.split("-");
-            list.shift();
+            var ls = value.split("-");
+            ls.shift();
             var nv = [];
-            for (var i = 0; i < list.length; i++) {
-                nv.push(list[i].split("|"));
+            for (var j = 0; j < ls.length; j++) {
+                nv.push(ls[j].split("|"));
             }
             value = nv;
-        } else if (startsWith(value,"\"")) {
+        } else if (startsWith(value, "\"")) {
             value = value.replace(/"/g, "");
+        } else if (value == "true") {
+            value = true;
+        } else if (value == "false") {
+            value = false;
         } else {
-            if (value == "true") {
-                value = true;
-            } else if (value == "false") {  
-                value = false 
-            } else {
-                value = parseFloat(value);
-            }
+            value = parseFloat(value);
         }
-        tupleList[key] = value;
+        result[key] = value;
     }
-    return tupleList;
+    return result;
 }

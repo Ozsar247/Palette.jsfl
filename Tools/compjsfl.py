@@ -5,6 +5,7 @@ file = filedialog.askopenfile(mode='r', filetypes=[("JSFL Files", "*.jsfl"), ("A
 if file:
     content = file.read()
     content = content.replace("\\", "\\\\");
+    content = content.replace("'", "\\'"); 
     split = content.split("\n")
     export = ""
     for s in split:

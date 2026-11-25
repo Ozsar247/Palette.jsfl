@@ -1,46 +1,9 @@
 var color = {{{INDEX}}};
 var configFolder = fl.configURI;
+var instFolder = configFolder + "/Palette.jsfl";
 
+var selected;
 var config;
-
-function startsWith(str, prefix) {
-  return str.indexOf(prefix) === 0;
-}
-
-function parsePalette(palette) {
-    palette = palette.replace(/\n/g, "");
-    var list = palette.split(",");
-    var tupleList = [];
-    for (var i = 0; i < list.length; i++) {
-        var s = list[i];
-        var split = s.split("=");
-        var key = split[0];
-        var value = split[1];
-        
-        if (startsWith(value, "[")) {
-            value = value.replace("[", "").replace("]", "");
-            var list = value.split("-");
-            list.shift();
-            var nv = [];
-            for (var i = 0; i < list.length; i++) {
-                nv.push(list[i].split("|"));
-            }
-            value = nv;
-        } else if (startsWith(value,"\"")) {
-            value = value.replace(/"/g, "");
-        } else {
-            if (value == "true") {
-                value = true;
-            } else if (value == "false") {  
-                value = false 
-            } else {
-                value = parseFloat(value);
-            }
-        }
-        tupleList[key] = value;
-    }
-    return tupleList;
-}
 
 var currentFill;
 var currentStroke;
@@ -52,11 +15,17 @@ function run() {
         return;
     }
 
-    if (!FLfile.exists(configFolder + "/selected.palette")) {
-        fl.trace("No selected file exists.");
+    if (!FLfile.exists(instFolder + "/selected")) {
+        fl.trace("No selected file exists. Is your install broken?");
         return;
     } else {
-        config = parsePalette(FLfile.read(configFolder + "/selected.palette"));
+        selected = FLfile.read(instFolder + "/selected");
+        if (selected != "") {
+            config = parsePalette(FLfile.read(instFolder + "/Palettes/" + selected));
+        } else {
+            fl.trace("No selected exists. Is your install broken?");
+            return;
+        }
         var useFillStroke = config.UseFillStroke;
         if (!config.Colors[color]) {
             fl.trace("Color does not exist at index " + color);
